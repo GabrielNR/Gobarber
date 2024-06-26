@@ -1,13 +1,6 @@
 import { isEqual, parseISO, startOfHour } from 'date-fns';
 import { Router } from 'express';
-import { uuid } from 'uuidv4';
-
-//Interfaces
-interface Appointment {
-	id: string
-	provider: string
-	date: Date
-}
+import Appointment from '../models/Appointment'; //importando o model
 
 const appointmentsRouter = Router();
 
@@ -33,12 +26,7 @@ appointmentsRouter.post('/', (request, response) => {
       .json({ message: 'This appontment is already booked' });
   }
 
-  //Criacao do objeto
-  const appointment = {
-    id: uuid(),
-    provider,
-    date: parseDate,
-  };
+  const appointment = new Appointment(provider, parseDate);
 
   appointments.push(appointment);
 
