@@ -1,2 +1,1 @@
 # Gobarber
-# Gobarber
