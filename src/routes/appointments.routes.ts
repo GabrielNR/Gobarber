@@ -1,7 +1,8 @@
-import { parseISO, startOfHour } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { Router } from 'express';
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentService from '../services/CreateAppointmentService';
 
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
@@ -13,25 +14,24 @@ appointmentsRouter.get('/', (request, response) => {
 });
 
 appointmentsRouter.post('/', (request, response) => {
-  const { provider, date } = request.body;
-  
-  const parseDate = startOfHour(parseISO(date));
+  try {
+    const { provider, date } = request.body;
 
-  const findAppointentInSameDate = appointmentsRepository.findByDate(parseDate);
+    const parsedDate = parseISO(date)
 
-  //se tiver agendamento mesmo horario da um erro
-  if (findAppointentInSameDate) {
-    return response
-      .status(400)
-      .json({ message: 'This appontment is already booked' });
+    const createAppointment = new CreateAppointmentService(
+      appointmentsRepository,
+    );
+
+    const appointment = createAppointment.execute({
+      date: parsedDate,
+      provider,
+    });
+
+    return response.json(appointment);
+  } catch (error) {
+    return response.status(400).json({ error: error.message })
   }
-
-  const appointment = appointmentsRepository.create({
-    provider, 
-    date: parseDate
-  });
-
-  return response.json(appointment);
 });
 
 export default appointmentsRouter;
