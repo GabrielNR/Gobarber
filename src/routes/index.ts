@@ -1,5 +1,7 @@
 import { Router } from 'express';
+
 import appointmentsRouter from './appointments.routes';
+import sessionsRouter from './sessions.routes';
 import usersRouter from './user.routes';
 
 const routes = Router();
@@ -7,5 +9,6 @@ const routes = Router();
 //repassar qualquer http get/post/ por isso o use
 routes.use('/appointments', appointmentsRouter);
 routes.use('/users', usersRouter);
+routes.use('/sessions', sessionsRouter);
 
 export default routes;
