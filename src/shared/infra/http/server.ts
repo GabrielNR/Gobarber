@@ -1,3 +1,4 @@
+import '@shared/container';
 import '@shared/infra/typeorm';
 import 'express-async-errors';
 import 'reflect-metadata';
